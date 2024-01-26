@@ -11,6 +11,9 @@ const AppNavigation = () => {
       <Stack.Screen
         name={APP_ROUTER.BOTTOM_BAR}
         component={BottomBarNavigation}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

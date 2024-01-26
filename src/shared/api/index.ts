@@ -1,17 +1,20 @@
-import axios, {AxiosInstance} from 'axios';
+import {Book, User} from 'shared/types';
 
-const booksJson = require('./books.json');
-const usersJson = require('./users.json');
+import booksJson from './books.json';
+import usersJson from './users.json';
 
 class Api {
-  private readonly api: AxiosInstance;
+  // private readonly api: AxiosInstance;
 
-  constructor() {
-    this.api = axios.create();
-  }
-
-  public getUsers = async () => await this.api.get(usersJson);
-  public getBooks = async () => await this.api.get(booksJson);
+  // constructor() {
+  //   this.api = axios.create({
+  //     baseURL: 'https://example.com',
+  //   });
+  // }
+  public getUsers: () => Promise<{data: User[]}> = async () =>
+    await Promise.resolve(usersJson);
+  public getBooks: () => Promise<{data: Book[]}> = async () =>
+    await Promise.resolve(booksJson);
 }
 
 const $api = new Api();

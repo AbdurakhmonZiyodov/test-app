@@ -3,7 +3,7 @@ import {map} from 'lodash';
 import React, {useCallback} from 'react';
 import {BASE_PADDING} from 'shared/lib';
 import {TableRow} from '.';
-import {Box} from './box';
+import {Box} from './Box';
 
 const WIDTH = BASE_PADDING * 8;
 

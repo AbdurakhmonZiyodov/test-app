@@ -1,18 +1,20 @@
-import React, {useEffect, useRef} from 'react';
 import RN from 'components/RN';
-import Table from 'components/table';
-import {useAddingBooksModel} from './model';
-import {BASE_PADDING, COLORS} from 'shared/lib';
 import AddButton from 'components/add-button';
+import Table from 'components/table';
+import {AddingBooksModal} from 'features/adding-books';
 import {UseVisibility} from 'hooks/useVisibility';
+import {observer} from 'mobx-react-lite';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {BASE_PADDING, COLORS} from 'shared/lib';
+import {useBooksStore} from 'shared/store/books-store';
 
 const AddingBooks = () => {
-  const {
-    actions: {getBooks, sortByKey},
-    books,
-    sortType,
-  } = useAddingBooksModel();
+  const {getBooks, books, sortBooks, sortType} = useBooksStore();
   const modalRef = useRef<UseVisibility>(null);
+
+  const onShowModal = useCallback(() => {
+    modalRef.current?.show();
+  }, []);
 
   useEffect(() => {
     getBooks();
@@ -20,11 +22,7 @@ const AddingBooks = () => {
 
   return (
     <RN.View style={styles.container}>
-      <AddButton
-        onPress={() => {
-          modalRef.current?.show();
-        }}
-      />
+      <AddButton onPress={onShowModal} />
 
       <Table
         title="Книги"
@@ -34,27 +32,27 @@ const AddingBooks = () => {
           {
             key: 'id',
             title: 'id',
-            onPress: () => sortByKey('id'),
+            onPress: () => sortBooks('id'),
           },
           {
             key: 'title',
             title: 'Название',
-            onPress: () => sortByKey('title'),
+            onPress: () => sortBooks('title'),
           },
           {
             key: 'author',
             title: 'Автор',
-            onPress: () => sortByKey('author'),
+            onPress: () => sortBooks('author'),
           },
           {
             key: 'publisher',
             title: 'Издатель',
-            onPress: () => sortByKey('publisher'),
+            onPress: () => sortBooks('publisher'),
           },
           {
             key: 'year',
             title: 'Год',
-            onPress: () => sortByKey('year'),
+            onPress: () => sortBooks('year'),
           },
           {
             key: 'image_url',
@@ -63,6 +61,8 @@ const AddingBooks = () => {
           },
         ]}
       />
+
+      <AddingBooksModal _ref={modalRef} />
     </RN.View>
   );
 };
@@ -75,4 +75,4 @@ const styles = RN.StyleSheet.create({
   },
 });
 
-export default AddingBooks;
+export default observer(AddingBooks);

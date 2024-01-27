@@ -1,6 +1,6 @@
 import React, {FC, useImperativeHandle} from 'react';
 import RN from 'components/RN';
-import {AddingUsersForm} from 'entities/adding-users';
+import {AddingBooksForm} from 'entities/adding-books';
 import ReactNativeModal from 'react-native-modal';
 import useVisibility, {UseVisibility} from 'hooks/useVisibility';
 import {BASE_PADDING, COLORS} from 'shared/lib';
@@ -9,7 +9,7 @@ interface Props {
   _ref?: React.RefObject<UseVisibility>;
 }
 
-export const AddingUsersModal: FC<Props> = ({_ref}) => {
+export const AddingBooksModal: FC<Props> = ({_ref}) => {
   const modal = useVisibility();
   useImperativeHandle(_ref, () => modal, [modal]);
 
@@ -22,7 +22,7 @@ export const AddingUsersModal: FC<Props> = ({_ref}) => {
         onBackButtonPress={modal.hide}
         style={styles.wrap}>
         <RN.View style={styles.content}>
-          <AddingUsersForm onClose={modal.hide} />
+          <AddingBooksForm onClose={modal.hide} />
         </RN.View>
       </ReactNativeModal>
     </RN.View>

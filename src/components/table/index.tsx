@@ -1,7 +1,7 @@
 import RN from 'components/RN';
 import React from 'react';
 import {TableBody, TableHeader, TableTitle} from './ui';
-import {RowHeaderItem} from './ui/header';
+import {RowHeaderItem} from './ui/Header';
 
 export interface TableProps<T> {
   title: string;

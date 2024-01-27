@@ -1,1 +1,1 @@
-export {Form as AddingUsersForm} from './ui/form';
+export {Form as AddingUsersForm} from './ui/Form';

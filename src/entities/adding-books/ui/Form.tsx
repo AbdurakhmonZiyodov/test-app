@@ -1,30 +1,31 @@
-import React, {FC} from 'react';
+import {yupResolver} from '@hookform/resolvers/yup';
 import RN from 'components/RN';
+import {Button} from 'components/button';
 import TextInput from 'components/text-input/TextInput';
+import React, {FC} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SIZES} from 'shared/lib';
-import {yupResolver} from '@hookform/resolvers/yup';
-import {usersFormSchema} from 'shared/lib/form';
-import {DateInput} from 'components/date-picker';
-import {Button} from 'components/button';
-import {useUserStore} from 'shared/store/users-store';
+import {booksFormSchema} from 'shared/lib/form';
+import {genRandomImg} from 'shared/lib/utils';
+import {useBooksStore} from 'shared/store/books-store';
+import {Book} from 'shared/types';
 
 interface FormProps {
   onClose?(): void;
 }
 
 export const Form: FC<FormProps> = ({onClose}) => {
-  const {addNewUser} = useUserStore();
+  const {addNewBook, books} = useBooksStore();
   const {handleSubmit, control, reset} = useForm({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      middleName: '',
-      dob: '',
+      title: '',
+      author: '',
+      publisher: '',
+      year: '',
     },
     mode: 'all',
     reValidateMode: 'onBlur',
-    resolver: yupResolver(usersFormSchema),
+    resolver: yupResolver(booksFormSchema),
   });
 
   const actions = {
@@ -33,7 +34,11 @@ export const Form: FC<FormProps> = ({onClose}) => {
       reset();
     },
     onSubmit: handleSubmit(async formData => {
-      addNewUser(formData);
+      const data = {
+        ...formData,
+        image_url: genRandomImg(books),
+      };
+      addNewBook(data);
       actions.onClose();
     }),
   };
@@ -42,12 +47,12 @@ export const Form: FC<FormProps> = ({onClose}) => {
     <RN.View g={10}>
       <Controller
         control={control}
-        name={'firstName'}
+        name={'title'}
         render={({field: {value, onChange}, fieldState: {error}}) => (
           <TextInput
             value={value ?? ''}
             onChange={onChange}
-            placeholder="Имя"
+            placeholder="Название"
             style={styles.input}
             error={error}
           />
@@ -55,12 +60,12 @@ export const Form: FC<FormProps> = ({onClose}) => {
       />
       <Controller
         control={control}
-        name={'lastName'}
+        name={'author'}
         render={({field: {value, onChange}, fieldState: {error}}) => (
           <TextInput
             value={value ?? ''}
             onChange={onChange}
-            placeholder="Фамилия"
+            placeholder="Автор"
             style={styles.input}
             error={error}
           />
@@ -68,12 +73,12 @@ export const Form: FC<FormProps> = ({onClose}) => {
       />
       <Controller
         control={control}
-        name={'middleName'}
+        name={'publisher'}
         render={({field: {value, onChange}, fieldState: {error}}) => (
           <TextInput
             value={value ?? ''}
             onChange={onChange}
-            placeholder="Отчество"
+            placeholder="Издатель"
             style={styles.input}
             error={error}
           />
@@ -81,19 +86,21 @@ export const Form: FC<FormProps> = ({onClose}) => {
       />
       <Controller
         control={control}
-        name={'dob'}
+        name={'year'}
         render={({field: {value, onChange}, fieldState: {error}}) => (
-          <DateInput
-            value={value}
+          <TextInput
+            value={value ?? ''}
+            keyboardType="numeric"
             onChange={onChange}
-            placeholder="Дата рождения"
+            placeholder="Год"
+            style={styles.input}
             error={error}
           />
         )}
       />
 
       <Button
-        text="Добавить автора"
+        text="Добавить книгу"
         backgroundColor="blackThree"
         color="whith"
         onPress={actions.onSubmit}

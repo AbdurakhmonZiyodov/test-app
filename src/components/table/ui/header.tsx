@@ -2,7 +2,7 @@ import RN from 'components/RN';
 import {map} from 'lodash';
 import React from 'react';
 import {TableRow} from '.';
-import {Box} from './box';
+import {Box} from './Box';
 import {BASE_PADDING, COLORS} from 'shared/lib';
 import {styles} from './styles';
 

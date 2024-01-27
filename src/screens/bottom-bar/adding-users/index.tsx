@@ -1,18 +1,15 @@
 import RN from 'components/RN';
 import AddButton from 'components/add-button';
 import Table from 'components/table';
-import React, {useCallback, useEffect, useRef} from 'react';
-import {BASE_PADDING, COLORS} from 'shared/lib';
-import {useAddingUserModel} from './model';
 import {AddingUsersModal} from 'features/adding-users';
 import {UseVisibility} from 'hooks/useVisibility';
+import {observer} from 'mobx-react-lite';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {BASE_PADDING, COLORS} from 'shared/lib';
+import {useUserStore} from 'shared/store/users-store';
 
 const AddingUsers = () => {
-  const {
-    actions: {sortByKey, getUsers},
-    users,
-    sortType,
-  } = useAddingUserModel();
+  const {users, getUsers, sortType, sortUsers} = useUserStore();
   const modalRef = useRef<UseVisibility>(null);
 
   const onShowModal = useCallback(() => {
@@ -33,27 +30,27 @@ const AddingUsers = () => {
           {
             title: 'id',
             key: 'id',
-            onPress: () => sortByKey('id'),
+            onPress: () => sortUsers('id'),
           },
           {
             title: 'Имя',
             key: 'firstName',
-            onPress: () => sortByKey('firstName'),
+            onPress: () => sortUsers('firstName'),
           },
           {
             title: 'Фамилия',
             key: 'lastName',
-            onPress: () => sortByKey('lastName'),
+            onPress: () => sortUsers('lastName'),
           },
           {
             title: 'Отчество',
             key: 'middleName',
-            onPress: () => sortByKey('middleName'),
+            onPress: () => sortUsers('middleName'),
           },
           {
             title: 'Дата рождения',
             key: 'dob',
-            onPress: () => sortByKey('dob'),
+            onPress: () => sortUsers('dob'),
           },
         ]}
       />
@@ -70,4 +67,4 @@ const styles = RN.StyleSheet.create({
   },
 });
 
-export default AddingUsers;
+export default observer(AddingUsers);

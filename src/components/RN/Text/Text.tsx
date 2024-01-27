@@ -13,7 +13,7 @@ const Text: FC<Props> = ({children, color, style, ...resOfProps}) => {
   }
 
   return (
-    <RNText {...resOfProps} style={[style, {color}]}>
+    <RNText {...resOfProps} style={[style, !!color && {color}]}>
       {children}
     </RNText>
   );

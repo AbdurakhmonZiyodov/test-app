@@ -6,6 +6,7 @@ import {BOTTOM_BAR_ROUTER, BottomBarStackParamList} from 'navigation/types';
 import React, {useCallback} from 'react';
 import {AddingBooksScreen, AddingUsersScreen} from 'screens/bottom-bar';
 import {BookIcon, UserIcon} from 'shared/assets/icons';
+import {COLORS} from 'shared/lib';
 
 const Tab = createBottomTabNavigator<BottomBarStackParamList>();
 
@@ -22,7 +23,7 @@ const BottomBarNavigation = () => {
         case BOTTOM_BAR_ROUTER.ADD_USERS:
           return (
             <UserIcon
-              fill={focused ? 'blue' : 'black'}
+              fill={focused ? COLORS.blue : COLORS.gray}
               width={24}
               height={24}
             />
@@ -30,7 +31,7 @@ const BottomBarNavigation = () => {
         case BOTTOM_BAR_ROUTER.ADD_BOOKS:
           return (
             <BookIcon
-              fill={focused ? 'blue' : 'black'}
+              fill={focused ? COLORS.blue : COLORS.gray}
               width={24}
               height={24}
             />

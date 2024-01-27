@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import RN from 'components/RN';
 import TextInput from 'components/text-input/TextInput';
 import {Controller, useForm} from 'react-hook-form';
@@ -11,16 +11,20 @@ import {useUserStore} from 'shared/store/users-store';
 
 interface FormProps {
   onClose?(): void;
+  userID?: number;
 }
 
-export const Form: FC<FormProps> = ({onClose}) => {
-  const {addNewUser} = useUserStore();
+export const Form: FC<FormProps> = ({onClose, userID}) => {
+  const {addNewUser, findOneItem, udateUser} = useUserStore();
+  const isEditUser = !!userID;
+  const user = useMemo(() => findOneItem(userID!), [userID, findOneItem]);
+
   const {handleSubmit, control, reset} = useForm({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      middleName: '',
-      dob: '',
+      firstName: user?.firstName ?? '',
+      lastName: user?.lastName ?? '',
+      middleName: user?.middleName ?? '',
+      dob: user?.dob ?? '',
     },
     mode: 'all',
     reValidateMode: 'onBlur',
@@ -32,8 +36,8 @@ export const Form: FC<FormProps> = ({onClose}) => {
       onClose?.();
       reset();
     },
-    onSubmit: handleSubmit(async formData => {
-      addNewUser(formData);
+    onSubmit: handleSubmit(async data => {
+      isEditUser ? udateUser(data, userID) : addNewUser(data);
       actions.onClose();
     }),
   };
@@ -93,7 +97,7 @@ export const Form: FC<FormProps> = ({onClose}) => {
       />
 
       <Button
-        text="Добавить автора"
+        text={isEditUser ? 'Обновление автора' : ' Добавить автора'}
         backgroundColor="blackThree"
         color="whith"
         onPress={actions.onSubmit}

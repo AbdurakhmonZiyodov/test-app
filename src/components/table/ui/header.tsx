@@ -12,7 +12,7 @@ const HEIGHT = BASE_PADDING * 2;
 export interface RowHeaderItem<Key> {
   title: string;
   onPress?: () => void;
-  key: Key;
+  key: 'none' | Key;
 }
 
 export interface RowHeaderProps<Key> {

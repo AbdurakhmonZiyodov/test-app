@@ -1,4 +1,4 @@
-import React, {FC, useImperativeHandle} from 'react';
+import React, {FC, useImperativeHandle, useState} from 'react';
 import RN from 'components/RN';
 import {AddingBooksForm} from 'entities/adding-books';
 import ReactNativeModal from 'react-native-modal';
@@ -11,7 +11,18 @@ interface Props {
 
 export const AddingBooksModal: FC<Props> = ({_ref}) => {
   const modal = useVisibility();
-  useImperativeHandle(_ref, () => modal, [modal]);
+  const [bookID, setBookID] = useState<number>();
+  useImperativeHandle(
+    _ref,
+    () => ({
+      ...modal,
+      show: (id?: number) => {
+        modal.show();
+        setBookID(id);
+      },
+    }),
+    [modal],
+  );
 
   return (
     <RN.View>
@@ -22,7 +33,7 @@ export const AddingBooksModal: FC<Props> = ({_ref}) => {
         onBackButtonPress={modal.hide}
         style={styles.wrap}>
         <RN.View style={styles.content}>
-          <AddingBooksForm onClose={modal.hide} />
+          <AddingBooksForm onClose={modal.hide} bookID={bookID} />
         </RN.View>
       </ReactNativeModal>
     </RN.View>

@@ -1,4 +1,4 @@
-import {findIndex, sortBy} from 'lodash';
+import {find, map, sortBy} from 'lodash';
 import {makeAutoObservable, runInAction} from 'mobx';
 import {createContext, useContext} from 'react';
 import $api from 'shared/api';
@@ -32,17 +32,14 @@ class BooksStore {
     onEnd?.();
   };
 
-  udateBook = (form: Omit<Book, 'id'>, id: number, onEnd?: () => void) => {
-    const bookIndex = findIndex(this.books, {id});
-    if (bookIndex !== -1) {
-      this.books[bookIndex] = {
-        ...this.books[bookIndex],
-        ...form,
-      };
-    }
+  udateBook = (form: Book, id: number, onEnd?: () => void) => {
+    this.books = map(this.books, book =>
+      book.id !== id ? book : {...book, ...form},
+    );
 
     onEnd?.();
   };
+  findOneItem = (id: number) => find(this.books, {id});
 
   removeBook = (id: number) => {
     this.books = this.books.filter(book => book.id !== id);

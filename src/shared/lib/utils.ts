@@ -1,6 +1,7 @@
-import {Book} from 'shared/types';
+import $api from 'shared/api';
 
-export function genRandomImg(books: Book[]): string {
+export async function genRandomImg(): Promise<string> {
+  const books = (await $api.getBooks()).data;
   if (books.length > 0) {
     const randomIndex = Math.floor(Math.random() * books.length);
 

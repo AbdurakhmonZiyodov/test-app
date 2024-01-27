@@ -1,4 +1,4 @@
-import {findIndex, sortBy} from 'lodash';
+import {find, map, sortBy} from 'lodash';
 import {makeAutoObservable, runInAction} from 'mobx';
 import {createContext, useContext} from 'react';
 import $api from 'shared/api';
@@ -32,17 +32,14 @@ class UsersStore {
     onEnd?.();
   };
 
-  udateUser = (form: Omit<User, 'id'>, id: number, onEnd?: () => void) => {
-    const userIndex = findIndex(this.users, {id});
-    if (userIndex !== -1) {
-      this.users[userIndex] = {
-        ...this.users[userIndex],
-        ...form,
-      };
-    }
+  udateUser = (form: User, id: number, onEnd?: () => void) => {
+    this.users = map(this.users, user =>
+      user.id !== id ? user : {...user, ...form},
+    );
 
     onEnd?.();
   };
+  findOneItem = (id: number) => find(this.users, {id});
 
   removeUser = (id: number) => {
     this.users = this.users.filter(user => user.id !== id);

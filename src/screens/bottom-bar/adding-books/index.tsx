@@ -9,11 +9,11 @@ import {BASE_PADDING, COLORS} from 'shared/lib';
 import {useBooksStore} from 'shared/store/books-store';
 
 const AddingBooks = () => {
-  const {getBooks, books, sortBooks, sortType} = useBooksStore();
+  const {getBooks, books, sortBooks, sortType, removeBook} = useBooksStore();
   const modalRef = useRef<UseVisibility>(null);
 
-  const onShowModal = useCallback(() => {
-    modalRef.current?.show();
+  const onShowModal = useCallback((id?: number) => {
+    modalRef.current?.show(id);
   }, []);
 
   useEffect(() => {
@@ -23,11 +23,14 @@ const AddingBooks = () => {
   return (
     <RN.View style={styles.container}>
       <AddButton onPress={onShowModal} />
-
       <Table
         title="Книги"
         data={books}
         activeFilterType={sortType}
+        onDelete={id => removeBook(id)}
+        onEdit={id => {
+          onShowModal(id);
+        }}
         rowData={[
           {
             key: 'id',
@@ -57,7 +60,10 @@ const AddingBooks = () => {
           {
             key: 'image_url',
             title: 'Изображений',
-            onPress: () => {},
+          },
+          {
+            key: 'none',
+            title: 'Параметры',
           },
         ]}
       />

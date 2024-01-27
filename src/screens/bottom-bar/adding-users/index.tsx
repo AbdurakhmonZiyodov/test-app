@@ -9,11 +9,11 @@ import {BASE_PADDING, COLORS} from 'shared/lib';
 import {useUserStore} from 'shared/store/users-store';
 
 const AddingUsers = () => {
-  const {users, getUsers, sortType, sortUsers} = useUserStore();
+  const {users, getUsers, sortType, sortUsers, removeUser} = useUserStore();
   const modalRef = useRef<UseVisibility>(null);
 
-  const onShowModal = useCallback(() => {
-    modalRef.current?.show();
+  const onShowModal = useCallback((id?: number) => {
+    modalRef.current?.show(id);
   }, []);
 
   useEffect(() => {
@@ -26,6 +26,8 @@ const AddingUsers = () => {
         title="Авторы"
         data={users}
         activeFilterType={sortType}
+        onDelete={id => removeUser(id)}
+        onEdit={id => onShowModal(id)}
         rowData={[
           {
             title: 'id',
@@ -51,6 +53,10 @@ const AddingUsers = () => {
             title: 'Дата рождения',
             key: 'dob',
             onPress: () => sortUsers('dob'),
+          },
+          {
+            key: 'none',
+            title: 'Параметры',
           },
         ]}
       />

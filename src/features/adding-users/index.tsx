@@ -1,4 +1,4 @@
-import React, {FC, useImperativeHandle} from 'react';
+import React, {FC, useImperativeHandle, useState} from 'react';
 import RN from 'components/RN';
 import {AddingUsersForm} from 'entities/adding-users';
 import ReactNativeModal from 'react-native-modal';
@@ -11,7 +11,18 @@ interface Props {
 
 export const AddingUsersModal: FC<Props> = ({_ref}) => {
   const modal = useVisibility();
-  useImperativeHandle(_ref, () => modal, [modal]);
+  const [userID, setUserID] = useState<number>();
+  useImperativeHandle(
+    _ref,
+    () => ({
+      ...modal,
+      show: (id?: number) => {
+        setUserID(id);
+        modal.show();
+      },
+    }),
+    [modal],
+  );
 
   return (
     <RN.View>
@@ -22,7 +33,7 @@ export const AddingUsersModal: FC<Props> = ({_ref}) => {
         onBackButtonPress={modal.hide}
         style={styles.wrap}>
         <RN.View style={styles.content}>
-          <AddingUsersForm onClose={modal.hide} />
+          <AddingUsersForm onClose={modal.hide} userID={userID} />
         </RN.View>
       </ReactNativeModal>
     </RN.View>

@@ -2,26 +2,29 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import RN from 'components/RN';
 import {Button} from 'components/button';
 import TextInput from 'components/text-input/TextInput';
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SIZES} from 'shared/lib';
 import {booksFormSchema} from 'shared/lib/form';
 import {genRandomImg} from 'shared/lib/utils';
 import {useBooksStore} from 'shared/store/books-store';
-import {Book} from 'shared/types';
 
 interface FormProps {
   onClose?(): void;
+  bookID?: number;
 }
 
-export const Form: FC<FormProps> = ({onClose}) => {
-  const {addNewBook, books} = useBooksStore();
+export const Form: FC<FormProps> = ({onClose, bookID}) => {
+  const {addNewBook, findOneItem, udateBook} = useBooksStore();
+  const isEditBook = !!bookID;
+  const book = useMemo(() => findOneItem(bookID!), [bookID, findOneItem]);
+
   const {handleSubmit, control, reset} = useForm({
     defaultValues: {
-      title: '',
-      author: '',
-      publisher: '',
-      year: '',
+      title: book?.title ?? '',
+      author: book?.author ?? '',
+      publisher: book?.publisher ?? '',
+      year: (book?.year ?? '') as string,
     },
     mode: 'all',
     reValidateMode: 'onBlur',
@@ -36,9 +39,9 @@ export const Form: FC<FormProps> = ({onClose}) => {
     onSubmit: handleSubmit(async formData => {
       const data = {
         ...formData,
-        image_url: genRandomImg(books),
+        image_url: await genRandomImg(),
       };
-      addNewBook(data);
+      isEditBook ? udateBook(data, bookID) : addNewBook(data);
       actions.onClose();
     }),
   };
@@ -89,7 +92,7 @@ export const Form: FC<FormProps> = ({onClose}) => {
         name={'year'}
         render={({field: {value, onChange}, fieldState: {error}}) => (
           <TextInput
-            value={value ?? ''}
+            value={String(value) ?? ''}
             keyboardType="numeric"
             onChange={onChange}
             placeholder="Год"
@@ -100,7 +103,7 @@ export const Form: FC<FormProps> = ({onClose}) => {
       />
 
       <Button
-        text="Добавить книгу"
+        text={isEditBook ? 'Обновление книги' : 'Добавить книгу'}
         backgroundColor="blackThree"
         color="whith"
         onPress={actions.onSubmit}

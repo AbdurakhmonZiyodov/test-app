@@ -8,21 +8,27 @@ export interface TableProps<T> {
   data: T[];
   activeFilterType?: keyof T;
   rowData: RowHeaderItem<keyof T>[];
+  onDelete?(id: number): void;
+  onEdit?(id: number): void;
 }
 
 function Table<T>({
   title,
   data = [],
   rowData,
+  onDelete,
+  onEdit,
   activeFilterType,
 }: TableProps<T>) {
   return (
-    <RN.ScrollView horizontal showsHorizontalScrollIndicator={true}>
-      <RN.View>
-        <TableTitle>{title}</TableTitle>
-        <TableHeader data={rowData} activeFilter={activeFilterType} />
-        <TableBody data={data} />
-      </RN.View>
+    <RN.ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
+      <RN.ScrollView horizontal>
+        <RN.View>
+          <TableTitle>{title}</TableTitle>
+          <TableHeader data={rowData} activeFilter={activeFilterType} />
+          <TableBody data={data} onDelete={onDelete} onEdit={onEdit} />
+        </RN.View>
+      </RN.ScrollView>
     </RN.ScrollView>
   );
 }

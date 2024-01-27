@@ -15,6 +15,7 @@ import {
   StatusBar,
   Alert,
   Share,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import View from './View';
 import Text from './Text';
@@ -38,4 +39,5 @@ export default {
   View,
   Text,
   Share,
+  TouchableWithoutFeedback,
 };

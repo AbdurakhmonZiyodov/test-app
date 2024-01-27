@@ -21,7 +21,7 @@ const AddingUsers = () => {
   }, [getUsers]);
   return (
     <RN.View style={styles.container}>
-      <AddButton onPress={onShowModal} />
+      <AddButton onPress={() => onShowModal(undefined)} />
       <Table
         title="Авторы"
         data={users}

@@ -22,7 +22,7 @@ const AddingBooks = () => {
 
   return (
     <RN.View style={styles.container}>
-      <AddButton onPress={onShowModal} />
+      <AddButton onPress={() => onShowModal(undefined)} />
       <Table
         title="Книги"
         data={books}

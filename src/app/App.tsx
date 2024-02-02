@@ -1,9 +1,11 @@
 import React from 'react';
 import {withProviders} from './providers';
-import AppNavigation from 'navigation/shared/app-navigation';
+import {HomeScreen} from 'screens';
+
+const Main = () => <HomeScreen />;
 
 const App = () => {
-  return <AppNavigation />;
+  return <Main />;
 };
 
 export default withProviders(App);

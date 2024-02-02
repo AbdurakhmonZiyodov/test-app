@@ -20,7 +20,7 @@ const useVisibility = (initialState?: boolean) => {
 
 export type UseVisibility = {
   visible: boolean;
-  show: (id?: number) => void;
+  show: () => void;
   hide: () => void;
   toggle: () => void;
 };
